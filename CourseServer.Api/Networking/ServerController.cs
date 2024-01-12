@@ -6,30 +6,26 @@ namespace CourseServer.Api.Networking
     public class ServerController
     {
 
-        private readonly Server _server;
-        private readonly Thread _serverThread;
+        private readonly Listener _server;
 
         public Action<string>? OnLog;
         public Action<TcpClient>? OnClientHandle;
 
         public ServerController(string host, int port, int maxConcurrentListeners, int awaiterTimeoutMS)
         {
-            _server = new Server(OnMessage, HandleClient, host, port, maxConcurrentListeners, awaiterTimeoutMS);
-            _serverThread = new Thread(_server.Run);
+            _server = new Listener(HandleClient, host, port);
         }
 
         public void RunServer()
         {
-            _serverThread.Start();
+            _server.Run();
             OnLog?.Invoke("Server started");
         }
 
-        public void StopServerThread()
+        public void StopServer()
         {
             _server.Stop = true;
             OnLog?.Invoke("Stopping server thread");
-            _serverThread.Join();
-            OnLog?.Invoke("Stopped");
         }
 
         private void HandleClient(TcpClient tcpClient)

@@ -7,7 +7,7 @@ namespace CourseServer.Infrastructure.Contexts
     {
         public static void RegisterSqliteDbContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ProductsDbContext>(options => options.UseSqlite(connectionString));
+            services.AddDbContext<ProductsDbContext>(options => options.UseSqlite(connectionString, c => c.MigrationsAssembly("CourseServer.Api")));
         }
     }
 }

@@ -9,7 +9,7 @@ using CourseServer.Api.ClientControl;
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Sqlite") ?? throw new Exception("No connection string");
-//builder.Services.RegisterSqliteDbContext(connectionString);
+builder.Services.RegisterSqliteDbContext(connectionString);
 
 builder.AddServerControllerSingleton();
 

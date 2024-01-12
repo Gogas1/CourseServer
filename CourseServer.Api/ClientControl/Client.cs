@@ -1,4 +1,6 @@
-﻿using System.Net.Sockets;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using System;
+using System.Net.Sockets;
 using System.Text;
 
 namespace CourseServer.Api.ClientControl
@@ -6,89 +8,121 @@ namespace CourseServer.Api.ClientControl
     public class Client
     {
         private TcpClient _client;
+        private readonly CancellationToken connectionCT;
 
         public Guid Id { get; set; }
-        public bool IsAlive;
 
         public Action<Guid> OnDisconnect { get; set; }
-        public Action<string> OnReceive { get; set; }
+        public Action<ClientMessage> OnReceive { get; set; }
 
-        public Client(TcpClient client, Action<Guid> onDisconnect, Action<string> onReceive)
+        public Client(TcpClient client, Action<Guid> onDisconnect, Action<ClientMessage> onReceive, CancellationToken connectionCT)
         {
             _client = client;
 
             Id = Guid.NewGuid();
             OnDisconnect = onDisconnect ?? throw new ArgumentNullException(nameof(onDisconnect));
             OnReceive = onReceive ?? throw new ArgumentNullException(nameof(onReceive));
+
+            this.connectionCT = connectionCT;
+
+            Listen();
         }
 
-        public void SendMessage(string message)
+        public void Listen()
         {
-            if (_client.Connected)
-            {
-                using (var stream = _client.GetStream())
-                {
-                    byte[] data = Encoding.UTF8.GetBytes(message);
-                    stream.BeginWrite(data, 0, data.Length, SendMessageCallback, data);
-                }
-            }
-            Disconnect();
-        }
+            var stream = _client.GetStream();
 
-        public void SendMessageCallback(IAsyncResult asyncResult)
-        {
+            if (!stream.CanWrite && !stream.CanRead) return;
+
             try
             {
-                using (var stream = _client.GetStream())
+                byte[] buffer = new byte[4096];
+                stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+            }
+            catch (IOException ex)
+            {
+                if (_client.Connected && !connectionCT.IsCancellationRequested)
                 {
-                    stream.EndWrite(asyncResult);
+                    Listen();
                 }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private void BeginRead()
-        {
-            if (_client.Connected)
-            {
-                using (var stream = _client.GetStream())
-                {
-                    byte[] buffer = new byte[1024];
-
-                    stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
-                }
-            }
-            Disconnect();
         }
 
         private void ReadCallback(IAsyncResult asyncResult)
         {
+            byte[] buffer = (byte[])asyncResult.AsyncState;
+
             try
             {
-                var buffer = (byte[])asyncResult.AsyncState;
-
-                using (var stream = _client.GetStream())
+                var stream = _client.GetStream();
+            
+                int bytesReaded = stream.EndRead(asyncResult);
+                if (bytesReaded > 0)
                 {
-                    int bytesRead = stream.EndRead(asyncResult);
+                    string data = Encoding.UTF8.GetString(buffer);
+                    data = data.Trim('\0');
+                    OnReceive?.Invoke(new ClientMessage(data, this));
 
-                    if (bytesRead > 0)
+                    if (_client.Connected && !connectionCT.IsCancellationRequested)
                     {
-                        string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-                        BeginRead();
+                        stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
                     }
-                    if (!_client.Connected)
-                    {
-                        Disconnect();
-                    }
+                }
+                else
+                {
+                    Disconnect();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                if(_client.Connected && !connectionCT.IsCancellationRequested)
+                {
+                    var stream = _client.GetStream();
+
+                    stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+                }
+            }
+        }
+
+        public void SendMessage(string message)
+        {
+            var stream = _client.GetStream();
+
+            try
+            {
+                if (stream.CanWrite && _client.Connected && !connectionCT.IsCancellationRequested)
+                {
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    stream.BeginWrite(data, 0, data.Length, SendingCallback, null);
+                }
+                else
+                {
+                    Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                if(!_client.Connected || connectionCT.IsCancellationRequested)
+                {
+                    Disconnect();
+                }
+            }
+        }
+
+        private void SendingCallback(IAsyncResult asyncResult)
+        {
+            var stream = _client.GetStream();
+
+            try
+            {
+                stream.EndWrite(asyncResult);
+            }
+            catch (IOException ex) 
+            {
+                if (!_client.Connected || connectionCT.IsCancellationRequested)
+                {
+                    Disconnect();
+                }
             }
         }
 

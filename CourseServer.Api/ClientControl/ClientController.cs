@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CourseServer.Api.ClientControl
@@ -16,6 +18,8 @@ namespace CourseServer.Api.ClientControl
         private readonly ILogger<ClientController> _logger;
         private readonly ServerController _serverController;
         private readonly CommandController _commandController;
+
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
         private List<Client> clients = new List<Client>();
 
@@ -27,6 +31,8 @@ namespace CourseServer.Api.ClientControl
 
             _serverController.OnClientHandle += AddClient;
             _serverController.OnLog += Log;
+
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -38,14 +44,14 @@ namespace CourseServer.Api.ClientControl
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _serverController.StopServerThread();
+            _serverController.StopServer();
 
             return Task.CompletedTask;
         }
 
         private void AddClient(TcpClient client)
         {
-            Client newClient = new Client(client, HandleDisconnect, HandleReceivedMessage);
+            Client newClient = new Client(client, HandleDisconnect, HandleReceivedMessage, _cancellationTokenSource.Token);
         }
 
         private void HandleDisconnect(Guid id)
@@ -53,9 +59,18 @@ namespace CourseServer.Api.ClientControl
             clients.RemoveAll(x => x.Id == id);
         }
 
-        private void HandleReceivedMessage(string message)
+        private void HandleReceivedMessage(ClientMessage message)
         {
-            _commandController.SendCommand(message, "some body");
+            Client client = message.Client;
+            MasterMessage? data = JsonSerializer.Deserialize<MasterMessage>(message.Message);
+
+            if(data != null)
+            {
+                var answer = _commandController.SendCommand(data.Command, data.CommandData);
+                answer.RequestId = data.RequestId;
+
+                client.SendMessage(JsonSerializer.Serialize(answer));
+            }                                   
         }
 
         private void Log(string message)
