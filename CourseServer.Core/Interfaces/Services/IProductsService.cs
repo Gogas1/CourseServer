@@ -1,0 +1,18 @@
+﻿using CourseServer.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CourseServer.Core.Interfaces.Services
+{
+    public interface IProductsService
+    {
+        Task<Product> CreateNewOrReturnExisting(Product product);
+        Task<Product?> GetById(int id);
+        Task<Product> Add(Product product);
+        Task<List<Product>> GetListByIds(IEnumerable<int> ids);
+        Task<List<Product>> GetListByName(string name);
+    }
+}
