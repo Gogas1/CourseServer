@@ -60,12 +60,13 @@ namespace CourseServer.Api.ClientControl
                 if (bytesReaded > 0)
                 {
                     string data = Encoding.UTF8.GetString(buffer);
-                    data = data.Trim('\0');
+                    data = string.Join("", data.Split('\0'));
+                    
                     OnReceive?.Invoke(new ClientMessage(data, this));
 
                     if (_client.Connected && !connectionCT.IsCancellationRequested)
                     {
-                        stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+                        Listen();
                     }
                 }
                 else

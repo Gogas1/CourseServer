@@ -9,6 +9,6 @@ namespace CourseServer.Api.Commands
 {
     public abstract class Command
     {
-        public abstract MasterMessage Execute(string content);
+        public abstract Task<MasterMessage> Execute(string content);
     }
 }

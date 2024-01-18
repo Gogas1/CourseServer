@@ -13,6 +13,10 @@ namespace CourseServer.Api.Commands
         public static void RegisterCommands(this IServiceCollection services)
         {
             services.AddKeyedTransient<Command, TestCommand>("test");
+            services.AddKeyedTransient<Command, AddIncomeCommand>("create_income");
+            services.AddKeyedTransient<Command, AddIncomeProductSearchCommand>("product_searchfor_addincome");
+
+            services.AddSingleton<CommandController>();
         }
     }
 }

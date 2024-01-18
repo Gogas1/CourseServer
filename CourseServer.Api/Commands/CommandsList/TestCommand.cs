@@ -17,7 +17,7 @@ namespace CourseServer.Api.Commands.CommandsList
             _logger = logger;
         }
 
-        public override MasterMessage Execute(string content)
+        public override async Task<MasterMessage> Execute(string content)
         {
             TestCommandData? data = JsonSerializer.Deserialize<TestCommandData>(content);
 

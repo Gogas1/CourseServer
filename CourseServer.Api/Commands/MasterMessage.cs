@@ -10,7 +10,6 @@ namespace CourseServer.Api.Commands
 {    
     public class MasterMessage
     {
-        public string RequestId { get; set; }
         public string Command { get; set; }
         public string CommandData { get; set; }
     }

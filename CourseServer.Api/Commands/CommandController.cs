@@ -23,7 +23,7 @@ namespace CourseServer.Api.Commands
             _serviceProvider = serviceProvider;
         }
 
-        public MasterMessage SendCommand(string command, string body)
+        public async Task<MasterMessage> SendCommand(string command, string body)
         {
             Command? targetCommand = _serviceProvider.GetKeyedService<Command>(command.Trim('\0').ToLowerInvariant());
 
@@ -36,7 +36,7 @@ namespace CourseServer.Api.Commands
             }
             else
             {
-                answer = targetCommand.Execute(body);                
+                answer = await targetCommand.Execute(body);                
             }            
 
             return answer;

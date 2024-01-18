@@ -59,15 +59,14 @@ namespace CourseServer.Api.ClientControl
             clients.RemoveAll(x => x.Id == id);
         }
 
-        private void HandleReceivedMessage(ClientMessage message)
+        private async void HandleReceivedMessage(ClientMessage message)
         {
             Client client = message.Client;
             MasterMessage? data = JsonSerializer.Deserialize<MasterMessage>(message.Message);
 
             if(data != null)
             {
-                var answer = _commandController.SendCommand(data.Command, data.CommandData);
-                answer.RequestId = data.RequestId;
+                var answer = await _commandController.SendCommand(data.Command, data.CommandData);
 
                 client.SendMessage(JsonSerializer.Serialize(answer));
             }                                   
