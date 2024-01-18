@@ -1,9 +1,11 @@
 ﻿using CourseServer.Core.Interfaces.Repos;
 using CourseServer.Core.Models;
 using CourseServer.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +26,13 @@ namespace CourseServer.Infrastructure.Repos
             await _context.SaveChangesAsync();
 
             return income;
+        }
+
+        public async Task<IEnumerable<Income>> GetIncomesByConditionAsync(Expression<Func<Income, bool>> predicate)
+        {
+            return await _context.Incomes
+                .Where(predicate)
+                .ToListAsync();
         }
     }
 }

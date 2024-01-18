@@ -27,5 +27,10 @@ namespace CourseServer.Core.Services
 
             return await _incomeRepo.AddIncomeAsync(income);
         }
+
+        public async Task<IEnumerable<Income>> GetIncomesBeetweenDates(DateTime startDate, DateTime endDate)
+        {
+            return await _incomeRepo.GetIncomesByConditionAsync(i => i.CreatedAt >= startDate && i.CreatedAt <= endDate);
+        }
     }
 }

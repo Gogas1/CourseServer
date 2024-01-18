@@ -32,7 +32,7 @@ namespace CourseServer.Api.Commands.CommandsList
             {
                 Income income = new Income()
                 {
-                    DateTime = DateTime.Now,
+                    CreatedAt = DateTime.Now,
                     Supplier = data.Supplier,
                 };
 
