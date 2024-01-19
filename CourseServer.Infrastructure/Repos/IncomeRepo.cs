@@ -28,6 +28,15 @@ namespace CourseServer.Infrastructure.Repos
             return income;
         }
 
+        public async Task<Income?> GetByIdAsync(int id)
+        {
+            return await _context.Incomes
+                .Include(_ => _.IncomeProducts)          
+                .ThenInclude(_ => _.Product)
+                .ThenInclude(_ => _.TypeFeature)
+                .FirstOrDefaultAsync(_ => _.Id == id);
+        }
+
         public async Task<IEnumerable<Income>> GetIncomesByConditionAsync(Expression<Func<Income, bool>> predicate)
         {
             return await _context.Incomes

@@ -11,5 +11,6 @@ namespace CourseServer.Core.Interfaces.Services
     {
         Task<Income> AddIncome(Income income);
         Task<IEnumerable<Income>> GetIncomesBeetweenDates(DateTime startDate, DateTime endDate);
+        Task<Income?> GetIncomeById(int id);
     }
 }

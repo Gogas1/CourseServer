@@ -12,5 +12,6 @@ namespace CourseServer.Core.Interfaces.Repos
     {
         Task<Income> AddIncomeAsync(Income income);
         Task<IEnumerable<Income>> GetIncomesByConditionAsync(Expression<Func<Income, bool>> predicate);
+        Task<Income?> GetByIdAsync(int id);
     }
 }
