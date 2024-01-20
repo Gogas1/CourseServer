@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,5 +16,6 @@ namespace CourseServer.Core.Interfaces.Repos
         Task<Product> AddProductAsync(Product product);
         Task<List<Product>> GetProductsByIdsAsync(IEnumerable<int> ids);
         Task<IEnumerable<Product>> GetProductsByNameAsync(string name);
+        Task<IEnumerable<Product>> GetProductsByConditionAsync(Expression<Func<Product, bool>> condition);
     }
 }

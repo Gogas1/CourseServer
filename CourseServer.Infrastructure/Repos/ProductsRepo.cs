@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,15 @@ namespace CourseServer.Infrastructure.Repos
         public async Task<Product?> GetProductByPartNameAsync(string name)
         {
             return await _context.Products.FirstOrDefaultAsync(p => p.Name.Contains(name));
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByConditionAsync(Expression<Func<Product, bool>> condition)
+        {
+            return await _context.Products
+                .Include(_ => _.TypeFeature)
+                .Include(_ => _.PricingFeature)
+                .Where(condition)
+                .ToListAsync();
         }
 
         public async Task<List<Product>> GetProductsByIdsAsync(IEnumerable<int> ids)

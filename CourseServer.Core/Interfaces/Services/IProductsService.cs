@@ -14,5 +14,6 @@ namespace CourseServer.Core.Interfaces.Services
         Task<Product> Add(Product product);
         Task<List<Product>> GetListByIds(IEnumerable<int> ids);
         Task<List<Product>> GetListByName(string name);
+        Task<List<Product>> GetListByNameAndType(string name, string type);
     }
 }

@@ -23,7 +23,7 @@ namespace CourseServer.Core.Services
             return await _productsRepo.AddProductAsync(product);
         }
 
-        public async Task<Product?> CreateNewOrReturnExisting(Product product)
+        public async Task<Product> CreateNewOrReturnExisting(Product product)
         {
             if(product.Id == 0)
             {
@@ -57,6 +57,13 @@ namespace CourseServer.Core.Services
         public async Task<List<Product>> GetListByName(string name)
         {
             var products = await _productsRepo.GetProductsByNameAsync(name);
+
+            return products.ToList();
+        }
+
+        public async Task<List<Product>> GetListByNameAndType(string name, string type)
+        {
+            var products = await _productsRepo.GetProductsByConditionAsync(_ => _.Name.Contains(name) && _.TypeFeature.TypeFeature.Contains(type));
 
             return products.ToList();
         }
