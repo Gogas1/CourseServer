@@ -17,5 +17,7 @@ namespace CourseServer.Core.Interfaces.Repos
         Task<List<Product>> GetProductsByIdsAsync(IEnumerable<int> ids);
         Task<IEnumerable<Product>> GetProductsByNameAsync(string name);
         Task<IEnumerable<Product>> GetProductsByConditionAsync(Expression<Func<Product, bool>> condition);
+        Task<IEnumerable<Product>> GetProductsByPartNameAsync(string name);
+        //Task<IEnumerable<Product>> GetProductsByType(string type);
     }
 }

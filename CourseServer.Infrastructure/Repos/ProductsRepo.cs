@@ -61,5 +61,23 @@ namespace CourseServer.Infrastructure.Repos
         {
             return await _context.Products.Where(p => p.Name.Contains(name)).ToListAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByPartNameAsync(string name)
+        {
+            return await _context.Products
+                .Include(_ => _.TypeFeature)
+                .Include(_ => _.PricingFeature)
+                .Where(_ => _.Name.Contains(name))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByTypeAsync(string type)
+        {
+            return await _context.Products
+                .Include(_ => _.TypeFeature)
+                .Include(_ => _.PricingFeature)
+                .Where(_ => _.TypeFeature.TypeFeature.Contains(type))
+                .ToListAsync();
+        }
     }
 }
