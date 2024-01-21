@@ -26,7 +26,7 @@ namespace CourseServer.Api.Commands.CommandsList
 
             if (data == null)
             {
-                return new MasterMessage { Command = "addincome_wrongparams", CommandData = "wrongformat" };
+                return new MasterMessage { Command = "addincome_command_result", CommandData = JsonSerializer.Serialize(new CommandAnswer(true)) };
             }
             else
             {
@@ -54,7 +54,7 @@ namespace CourseServer.Api.Commands.CommandsList
                 income.Summ = income.IncomeProducts.Sum(x => x.Price * (decimal)x.Amount);
                 await _incomeService.AddIncome(income);
 
-                return new MasterMessage { Command = "addincome_succeeded", CommandData = "success" };
+                return new MasterMessage { Command = "addincome_command_result", CommandData = JsonSerializer.Serialize(new CommandAnswer(true)) };
             }
         }        
 
@@ -72,22 +72,32 @@ namespace CourseServer.Api.Commands.CommandsList
                 }
             };
         }
+
+        private class CommandAnswer
+        {
+            public bool Success { get; set; }
+
+            public CommandAnswer(bool success)
+            {
+                Success = success;
+            }
+        }
     }
 
     public class AddIncomeCommandData
     {
         public DateTime DateTime { get; set; }
-        public string Supplier { get; set; }
+        public string Supplier { get; set; } = string.Empty;
         public List<CommandIncomeProduct> Products { get; set; } = new();
     }
 
     public class CommandIncomeProduct
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public double Count { get; set; }
         public decimal Price { get; set; }
-        public string Type { get; set; }
-    }
+        public string Type { get; set; } = string.Empty;
+    }    
 }

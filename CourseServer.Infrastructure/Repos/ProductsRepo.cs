@@ -82,5 +82,11 @@ namespace CourseServer.Infrastructure.Repos
                 .Where(_ => _.TypeFeature.TypeFeature.Contains(type))
                 .ToListAsync();
         }
+
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
     }
 }

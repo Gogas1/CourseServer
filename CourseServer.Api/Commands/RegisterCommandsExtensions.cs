@@ -19,6 +19,9 @@ namespace CourseServer.Api.Commands
             services.AddKeyedTransient<Command, GetIncomeProductsCommand>("get_income_products");
             services.AddKeyedTransient<Command, SearchProductsCommand>("search_products");
             services.AddKeyedTransient<Command, GetOutgoingProductById>("get_outgoingproduct_id");
+            services.AddKeyedTransient<Command, SearchOutgoingProductsCommand>("search_products_outgoing");
+            services.AddKeyedTransient<Command, UpdateProductFeaturesCommand>("update_product_features");
+            services.AddKeyedTransient<Command, SubmitOutgoingCommand>("submit_outgoing");
 
             services.AddSingleton<CommandController>();
         }

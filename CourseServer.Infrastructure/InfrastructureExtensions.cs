@@ -17,6 +17,7 @@ namespace CourseServer.Infrastructure
         {
             services.AddScoped<IIncomeRepo, IncomeRepo>();
             services.AddScoped<IProductsRepo, ProductsRepo>();
+            services.AddScoped<IOutgoingRepo, OutgoingRepo>();
         }
 
         public static void RegisterSqliteDbContext(this IServiceCollection services, string connectionString)

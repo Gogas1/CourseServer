@@ -49,6 +49,21 @@ namespace CourseServer.Core.Services
             return await _productsRepo.GetProductByIdAsync(id);
         }
 
+        public async Task<List<Product>> GetListByIdAndName(int id, string name)
+        {
+            if(id != 0)
+            {
+                var products = await _productsRepo.GetProductsByConditionAsync(_ => _.Id == id);
+                return products.ToList();
+            }
+            else
+            {
+                var products = await _productsRepo.GetProductsByConditionAsync(_ => _.Name.Contains(name));
+                return products.ToList();
+            }
+
+        }
+
         public async Task<List<Product>> GetListByIds(IEnumerable<int> ids)
         {
             return await _productsRepo.GetProductsByIdsAsync(ids);
@@ -66,6 +81,36 @@ namespace CourseServer.Core.Services
             var products = await _productsRepo.GetProductsByConditionAsync(_ => _.Name.Contains(name) && _.TypeFeature.TypeFeature.Contains(type));
 
             return products.ToList();
+        }
+
+        public async Task UpdateFeatures(int productId, string newType, decimal newPrice)
+        {
+            var targetProduct = await GetById(productId);
+            if (targetProduct == null) return;
+
+            if (targetProduct.PricingFeature == null)
+            {
+                var pricingFeature = new ProductPricingFeature();
+                pricingFeature.Price = newPrice;
+                targetProduct.PricingFeature = pricingFeature;
+            }
+            else
+            {
+                targetProduct.PricingFeature.Price = newPrice;
+            }
+
+            if(targetProduct.TypeFeature == null)
+            {
+                var typeFeature = new ProductTypeFeature();
+                typeFeature.TypeFeature = newType;
+                targetProduct.TypeFeature = typeFeature;
+            }
+            else
+            {
+                targetProduct.TypeFeature.TypeFeature = newType;
+            }
+
+            await _productsRepo.UpdateAsync(targetProduct);
         }
     }
 }

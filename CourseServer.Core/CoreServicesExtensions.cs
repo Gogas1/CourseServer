@@ -15,6 +15,7 @@ namespace CourseServer.Core
         {
             services.AddScoped<IIncomeService, IncomeSerivce>();
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IOutgoingService, OutgoingService>();
         }
     }
 }
