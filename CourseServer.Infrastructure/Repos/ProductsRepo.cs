@@ -35,7 +35,10 @@ namespace CourseServer.Infrastructure.Repos
 
         public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products
+                .Include(_ => _.TypeFeature)
+                .Include(_ => _.PricingFeature)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Product?> GetProductByPartNameAsync(string name)
