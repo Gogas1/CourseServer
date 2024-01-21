@@ -27,5 +27,10 @@ namespace CourseServer.Core.Services
 
             return await _outgoingRepo.AddAsync(outgoing);
         }
+
+        public async Task<IEnumerable<Outgoing>> GetOutgoingsBeetweenDates(DateTime startDate, DateTime endDate)
+        {
+            return await _outgoingRepo.GetOutgoingsByConditionAsync(i => i.DateTime >= startDate && i.DateTime <= endDate);
+        }
     }
 }
