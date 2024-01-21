@@ -1,10 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -21,14 +16,14 @@ namespace CourseServer.Api.Commands.CommandsList
         {
             var id = JsonSerializer.Deserialize<int>(content);
 
-            if(id == 0)
+            if (id == 0)
             {
                 return ReturnEmptyMessage();
             }
             else
             {
                 var targetIncome = await _incomeService.GetIncomeById(id);
-                if(targetIncome == null)
+                if (targetIncome == null)
                 {
                     return ReturnEmptyMessage();
                 }

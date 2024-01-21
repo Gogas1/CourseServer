@@ -2,14 +2,8 @@
 using CourseServer.Api.Networking;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.ClientControl
 {
@@ -64,12 +58,12 @@ namespace CourseServer.Api.ClientControl
             Client client = message.Client;
             MasterMessage? data = JsonSerializer.Deserialize<MasterMessage>(message.Message);
 
-            if(data != null)
+            if (data != null)
             {
                 var answer = await _commandController.SendCommand(data.Command, data.CommandData);
 
                 client.SendMessage(JsonSerializer.Serialize(answer));
-            }                                   
+            }
         }
 
         private void Log(string message)

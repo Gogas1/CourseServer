@@ -1,10 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {

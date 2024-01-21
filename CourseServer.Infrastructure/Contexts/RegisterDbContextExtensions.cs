@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
-//namespace CourseServer.Infrastructure.Contexts
+﻿//namespace CourseServer.Infrastructure.Contexts
 //{
 //    public static class RegisterDbContextExtensions
 //    {

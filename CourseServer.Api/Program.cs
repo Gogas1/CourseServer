@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using CourseServer.Api.ClientControl;
 using CourseServer.Api.Commands;
 using CourseServer.Api.Networking;
-using CourseServer.Api.ClientControl;
-using CourseServer.Infrastructure;
 using CourseServer.Core;
+using CourseServer.Infrastructure;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 

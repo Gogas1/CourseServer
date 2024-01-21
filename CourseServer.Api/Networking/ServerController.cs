@@ -1,5 +1,4 @@
-﻿using CourseServer.Api.ClientControl;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 
 namespace CourseServer.Api.Networking
 {

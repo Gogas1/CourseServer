@@ -15,8 +15,8 @@ namespace CourseServer.Infrastructure.Contexts
         public DbSet<ProductIncome> ProductIncomes { get; set; }
         public DbSet<ProductOutgoing> ProductOutgoings { get; set; }
         public DbSet<ProductPricingFeature> ProductFeatures { get; set; }
-        public DbSet<ProductTypeFeature> ProductTypes { get; set; }            
-        
+        public DbSet<ProductTypeFeature> ProductTypes { get; set; }
+
 
     }
 }

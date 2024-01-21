@@ -2,12 +2,7 @@
 using CourseServer.Core.Models;
 using CourseServer.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseServer.Infrastructure.Repos
 {
@@ -31,7 +26,7 @@ namespace CourseServer.Infrastructure.Repos
         public async Task<Income?> GetByIdAsync(int id)
         {
             return await _context.Incomes
-                .Include(_ => _.IncomeProducts)          
+                .Include(_ => _.IncomeProducts)
                 .ThenInclude(_ => _.Product)
                 .ThenInclude(_ => _.TypeFeature)
                 .FirstOrDefaultAsync(_ => _.Id == id);

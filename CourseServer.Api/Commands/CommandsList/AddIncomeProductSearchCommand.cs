@@ -1,13 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using CourseServer.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -24,30 +16,30 @@ namespace CourseServer.Api.Commands.CommandsList
         {
             CommandData? data = JsonSerializer.Deserialize<CommandData>(content);
 
-            if(data == null)
+            if (data == null)
             {
                 return new MasterMessage { Command = "incomeproductsearch_wrongparams", CommandData = "wrongformat" };
             }
             else
             {
-                if(data.Id != 0)
+                if (data.Id != 0)
                 {
                     var targetProduct = await _productsService.GetById(data.Id);
-                    if(targetProduct != null)
+                    if (targetProduct != null)
                     {
                         ResponseData responseData = new();
                         responseData.ProductFound = true;
                         responseData.FoundProducts.Add(new ProductFound(targetProduct.Id,
                                                                         targetProduct.Name,
                                                                         targetProduct.Description ?? string.Empty,
-                                                                        targetProduct.TypeFeature?.TypeFeature ?? string.Empty ));
+                                                                        targetProduct.TypeFeature?.TypeFeature ?? string.Empty));
 
                         return new MasterMessage { Command = "addincome_productfound", CommandData = JsonSerializer.Serialize(responseData) };
                     }
                     else
                     {
                         return await GetMasterMessageByNameSearch(data.Name);
-                    }                    
+                    }
                 }
                 else
                 {
@@ -63,7 +55,7 @@ namespace CourseServer.Api.Commands.CommandsList
         /// <returns></returns>
         private async Task<MasterMessage> GetMasterMessageByNameSearch(string name)
         {
-            if(!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 var targetProducts = await _productsService.GetListByName(name);
                 if (targetProducts.Any())
@@ -81,7 +73,7 @@ namespace CourseServer.Api.Commands.CommandsList
                     return new MasterMessage { Command = "addincome_productfound", CommandData = JsonSerializer.Serialize(responseData) };
                 }
             }
-            
+
             ResponseData failedResponseData = new();
             failedResponseData.ProductFound = false;
 

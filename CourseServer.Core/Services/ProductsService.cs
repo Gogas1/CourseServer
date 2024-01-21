@@ -1,11 +1,6 @@
 ﻿using CourseServer.Core.Interfaces.Repos;
 using CourseServer.Core.Interfaces.Services;
 using CourseServer.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseServer.Core.Services
 {
@@ -25,14 +20,14 @@ namespace CourseServer.Core.Services
 
         public async Task<Product> CreateNewOrReturnExisting(Product product)
         {
-            if(product.Id == 0)
+            if (product.Id == 0)
             {
                 return await _productsRepo.AddProductAsync(product);
             }
             else
-            {              
+            {
                 var targetProduct = await _productsRepo.GetProductByIdAsync(product.Id);
-                if(targetProduct ==  null)
+                if (targetProduct == null)
                 {
                     product.Id = 0;
                     return await _productsRepo.AddProductAsync(product);
@@ -51,7 +46,7 @@ namespace CourseServer.Core.Services
 
         public async Task<List<Product>> GetListByIdAndName(int id, string name)
         {
-            if(id != 0)
+            if (id != 0)
             {
                 var products = await _productsRepo.GetProductsByConditionAsync(_ => _.Id == id);
                 return products.ToList();
@@ -99,7 +94,7 @@ namespace CourseServer.Core.Services
                 targetProduct.PricingFeature.Price = newPrice;
             }
 
-            if(targetProduct.TypeFeature == null)
+            if (targetProduct.TypeFeature == null)
             {
                 var typeFeature = new ProductTypeFeature();
                 typeFeature.TypeFeature = newType;

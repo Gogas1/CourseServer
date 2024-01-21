@@ -1,10 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -20,7 +15,7 @@ namespace CourseServer.Api.Commands.CommandsList
         public override async Task<MasterMessage> Execute(string content)
         {
             CommandData? data = JsonSerializer.Deserialize<CommandData>(content);
-            if(data == null)
+            if (data == null)
             {
                 return new MasterMessage { Command = "products_search_wrongparams", CommandData = "wrong_format" };
             }
@@ -38,7 +33,7 @@ namespace CourseServer.Api.Commands.CommandsList
                         Description = item.Description ?? string.Empty,
                         Amount = item.Amount,
                         Price = item.PricingFeature?.Price ?? 0,
-                        Type = item.TypeFeature?.TypeFeature ?? string.Empty                        
+                        Type = item.TypeFeature?.TypeFeature ?? string.Empty
                     };
                     commandAnswer.FoundProducts.Add(newProductRecord);
                 }

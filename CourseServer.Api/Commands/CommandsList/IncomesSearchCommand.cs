@@ -1,10 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -21,7 +16,7 @@ namespace CourseServer.Api.Commands.CommandsList
         {
             CommandData? data = JsonSerializer.Deserialize<CommandData>(content);
 
-            if(data == null)
+            if (data == null)
             {
                 return new MasterMessage { Command = "incomesearch_wrongparams", CommandData = "wrongformat" };
             }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace CourseServer.Core.Models
+﻿namespace CourseServer.Core.Models
 {
     public class ProductTypeFeature
     {

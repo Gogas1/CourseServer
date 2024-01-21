@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
 
 namespace CourseServer.Api.ClientControl
@@ -55,13 +53,13 @@ namespace CourseServer.Api.ClientControl
             try
             {
                 var stream = _client.GetStream();
-            
+
                 int bytesReaded = stream.EndRead(asyncResult);
                 if (bytesReaded > 0)
                 {
                     string data = Encoding.UTF8.GetString(buffer);
                     data = string.Join("", data.Split('\0'));
-                    
+
                     OnReceive?.Invoke(new ClientMessage(data, this));
 
                     if (_client.Connected && !connectionCT.IsCancellationRequested)
@@ -76,7 +74,7 @@ namespace CourseServer.Api.ClientControl
             }
             catch (Exception ex)
             {
-                if(_client.Connected && !connectionCT.IsCancellationRequested)
+                if (_client.Connected && !connectionCT.IsCancellationRequested)
                 {
                     var stream = _client.GetStream();
 
@@ -103,7 +101,7 @@ namespace CourseServer.Api.ClientControl
             }
             catch (Exception ex)
             {
-                if(!_client.Connected || connectionCT.IsCancellationRequested)
+                if (!_client.Connected || connectionCT.IsCancellationRequested)
                 {
                     Disconnect();
                 }
@@ -118,7 +116,7 @@ namespace CourseServer.Api.ClientControl
             {
                 stream.EndWrite(asyncResult);
             }
-            catch (IOException ex) 
+            catch (IOException ex)
             {
                 if (!_client.Connected || connectionCT.IsCancellationRequested)
                 {

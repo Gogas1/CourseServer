@@ -1,10 +1,5 @@
 ﻿using CourseServer.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -21,14 +16,14 @@ namespace CourseServer.Api.Commands.CommandsList
         {
             int id = JsonSerializer.Deserialize<int>(content);
 
-            if(id == 0)
+            if (id == 0)
             {
                 return ReturnFailtureMasterMassage();
             }
             else
             {
                 var targetProduct = await _productsService.GetById(id);
-                if(targetProduct == null)
+                if (targetProduct == null)
                 {
                     return ReturnFailtureMasterMassage();
                 }

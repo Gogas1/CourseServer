@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Networking
 {
@@ -57,7 +51,7 @@ namespace CourseServer.Api.Networking
             var client = _listener.EndAcceptTcpClient(asyncResult);
 
             OnHandleConnection?.Invoke(client);
-            if(!Stop)
+            if (!Stop)
             {
                 StartAccepting();
             }
@@ -65,6 +59,6 @@ namespace CourseServer.Api.Networking
             {
                 _listener.Stop();
             }
-        }        
+        }
     }
 }

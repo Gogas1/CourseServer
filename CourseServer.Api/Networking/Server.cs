@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Networking
 {
@@ -12,10 +7,10 @@ namespace CourseServer.Api.Networking
     {
         private volatile bool _Stop;
 
-        public bool Stop 
-        { 
-            get => _Stop; 
-            set => _Stop = value; 
+        public bool Stop
+        {
+            get => _Stop;
+            set => _Stop = value;
         }
 
         private readonly int _awaiterTimeoutMS;
@@ -44,7 +39,7 @@ namespace CourseServer.Api.Networking
 
         public void Run()
         {
-            if (IsRunning) 
+            if (IsRunning)
                 return;
 
             IsRunning = true;
@@ -71,7 +66,7 @@ namespace CourseServer.Api.Networking
                 AwaiterTasks.Add(awaiterTask);
             }
             int RemoveAtIndex = Task.WaitAny(AwaiterTasks.ToArray(), _awaiterTimeoutMS);
-            if(RemoveAtIndex > 0) AwaiterTasks.RemoveAt(RemoveAtIndex);
+            if (RemoveAtIndex > 0) AwaiterTasks.RemoveAt(RemoveAtIndex);
         }
 
         private void ProcessAcceptedClient(TcpClient client)

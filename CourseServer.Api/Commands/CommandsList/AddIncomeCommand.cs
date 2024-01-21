@@ -1,11 +1,6 @@
 ﻿using CourseServer.Core.Interfaces.Services;
 using CourseServer.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Commands.CommandsList
 {
@@ -56,7 +51,7 @@ namespace CourseServer.Api.Commands.CommandsList
 
                 return new MasterMessage { Command = "addincome_command_result", CommandData = JsonSerializer.Serialize(new CommandAnswer(true)) };
             }
-        }        
+        }
 
         private Product ConvertCommandIncomeProductToProduct(CommandIncomeProduct commandIncomeProduct)
         {
@@ -99,5 +94,5 @@ namespace CourseServer.Api.Commands.CommandsList
         public double Count { get; set; }
         public decimal Price { get; set; }
         public string Type { get; set; } = string.Empty;
-    }    
+    }
 }

@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseServer.Api.Networking
 {
@@ -25,7 +20,7 @@ namespace CourseServer.Api.Networking
         {
             return new ServerSetting(configuration.GetSection("ServerSettings")[setting] ?? throw new ArgumentNullException("Target server setting is missing"));
         }
-        
+
     }
 
     public class ServerSetting
